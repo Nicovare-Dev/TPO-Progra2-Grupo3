@@ -1,4 +1,4 @@
-package TPO.Gestion;
+package model;
 
 import java.util.Deque;
 import java.util.ArrayDeque;

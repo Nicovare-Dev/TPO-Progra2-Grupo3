@@ -1,7 +1,7 @@
-package TPO.Gestion;
+package model;
 
 public class Paquete <T> {
-    private String id;
+    private int id;
     private double peso;
     private String destino;
     private boolean urgente;
@@ -12,7 +12,7 @@ public Paquete() {
 }
 
 //constructor
-public Paquete(String id, double peso, String destino, boolean urgente, T contenido) {
+public Paquete(int id, double peso, String destino, boolean urgente, T contenido) {
     this.id = id;
     this.peso = peso;
     this.destino = destino;
@@ -21,7 +21,7 @@ public Paquete(String id, double peso, String destino, boolean urgente, T conten
 }
 
 //getters
-public String getId() {
+public int getId() {
     return id;
 }
 
@@ -42,7 +42,7 @@ public T getContenido() {
 }
 
 //setters
-public void setId(String id) {
+public void setId(int id) {
     this.id = id;
 }
 

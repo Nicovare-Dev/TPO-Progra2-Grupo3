@@ -1,4 +1,4 @@
-package TPO.Gestion;
+package model;
 
 public class SistemaGestion {
     
