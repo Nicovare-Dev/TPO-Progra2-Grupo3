@@ -25,22 +25,27 @@ public class Camion <T> {
     }
 
     // Carga un paquete al camión si hay espacio disponible.
-    // Devuelve true si se cargó correctamente, false si el camión está lleno.
-    public boolean cargarPaquete(Paquete<T> paquete) {
+    public void cargarPaquete(Paquete<T> paquete) {
         if (estaLleno()) {
-            return false;
+            throw new IllegalStateException("El camión está lleno.");
         }
         pila.push(paquete);
-        return true;
     }
 
     // Descarga (remueve) el último paquete cargado en el camión.
-    // Si el camión está vacío, devuelve null.
     public Paquete<T> descargarUltimoPaquete() {
         if (estaVacio()) {
-            return null;
+            throw new IllegalStateException("El camión está vacío.");
         }
         return pila.pop();
+    }
+
+    // Permite ver el último paquete cargado sin removerlo.
+    public Paquete<T> verUltimoPaquete() {
+        if (estaVacio()) {
+            throw new IllegalStateException("El camión está vacío.");
+        }
+        return pila.peek();
     }
 
     // Descarga todos los paquetes del camión.
@@ -48,15 +53,6 @@ public class Camion <T> {
         while (!pila.isEmpty()) {
             pila.pop();
         }
-    }
-
-    // Permite ver el último paquete cargado sin removerlo.
-    // Devuelve null si el camión está vacío.
-    public Paquete<T> verUltimoPaquete() {
-        if (estaVacio()) {
-            return null;
-        }
-        return pila.peek();
     }
 
     // Indica si el camión está lleno (alcanzó su capacidad máxima)

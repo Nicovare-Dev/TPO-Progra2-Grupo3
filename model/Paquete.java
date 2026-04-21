@@ -1,6 +1,7 @@
 package model;
 
 public class Paquete <T> {
+    private TipoCarga tipoCarga;
     private int id;
     private double peso;
     private String destino;
@@ -12,15 +13,20 @@ public Paquete() {
 }
 
 //constructor
-public Paquete(int id, double peso, String destino, boolean urgente, T contenido) {
+public Paquete(int id, double peso, String destino, boolean urgente, TipoCarga tipoCarga, T contenido) {
     this.id = id;
     this.peso = peso;
     this.destino = destino;
     this.urgente = urgente;
+    this.tipoCarga = tipoCarga;
     this.contenido = contenido;
 }
 
 //getters
+public TipoCarga getTipoCarga() {
+    return tipoCarga;
+}
+
 public int getId() {
     return id;
 }
@@ -42,6 +48,10 @@ public T getContenido() {
 }
 
 //setters
+public void setTipoCarga(TipoCarga tipoCarga) {
+    this.tipoCarga = tipoCarga;
+}
+
 public void setId(int id) {
     this.id = id;
 }
@@ -69,6 +79,7 @@ public String toString() {
            ", peso=" + peso + 
            ", destino=" + destino + 
            ", urgente=" + urgente + 
+           ", tipoCarga=" + tipoCarga + 
            ", contenido=" + contenido + "]";
 }
 

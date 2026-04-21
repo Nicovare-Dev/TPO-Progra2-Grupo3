@@ -8,20 +8,20 @@ import java.util.Set;
 public class CentroDistribucion<T> {
     private Queue<Paquete<T>> colaPrioridad;
     private Queue<Paquete<T>> colaNormal;
-    private Set<Integer> IdsRegistrados;
+    private Set<Integer> idsRegistrados;
 
     public CentroDistribucion() {
         this.colaPrioridad = new ArrayDeque<>();
         this.colaNormal = new ArrayDeque<>();
-        this.IdsRegistrados = new HashSet<>();
+        this.idsRegistrados = new HashSet<>();
     }
 
     // Registra un paquete (valida ID único) y lo encola según su prioridad.
     public void registrarPaquete(Paquete<T> paquete){
-        if (IdsRegistrados.contains(paquete.getId())){
+        if (idsRegistrados.contains(paquete.getId())){
             throw new IllegalArgumentException("El id de ese paquete ya es existente");
         }
-        IdsRegistrados.add(paquete.getId());
+        idsRegistrados.add(paquete.getId());
         if (esPrioritario(paquete)){
             colaPrioridad.add(paquete);
         }
@@ -41,6 +41,17 @@ public class CentroDistribucion<T> {
             return colaPrioridad.peek();
         } else if (!colaNormal.isEmpty()) {
             return colaNormal.peek();
+        } else {
+            throw new IllegalStateException("No hay paquetes pendientes en el centro de distribución.");
+        }
+    }
+
+    // Despacha (remueve y devuelve) el próximo paquete a entregar.
+    public Paquete<T> despacharPaquete() {
+        if (!colaPrioridad.isEmpty()) {
+            return colaPrioridad.poll();
+        } else if (!colaNormal.isEmpty()) {
+            return colaNormal.poll();
         } else {
             throw new IllegalStateException("No hay paquetes pendientes en el centro de distribución.");
         }
@@ -66,5 +77,10 @@ public class CentroDistribucion<T> {
         return colaPrioridad.size() + colaNormal.size();
     }
 
+    @Override
+    public String toString() {
+        return "CentroDistribucion [prioritarios=" + colaPrioridad.size() + 
+            ", normales=" + colaNormal.size() + "]";
+    }
 
 }
