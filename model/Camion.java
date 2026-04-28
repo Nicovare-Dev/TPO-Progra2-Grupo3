@@ -25,6 +25,8 @@ public class Camion <T> {
     }
 
     // Carga un paquete al camión si hay espacio disponible.
+    // Complejidad temporal: O(1) — push sobre ArrayDeque es constante amortizado.
+    // Complejidad espacial: O(1) — solo se agrega un nodo.
     public void cargarPaquete(Paquete<T> paquete) {
         if (estaLleno()) {
             throw new IllegalStateException("El camión está lleno.");
@@ -33,6 +35,8 @@ public class Camion <T> {
     }
 
     // Descarga (remueve) el último paquete cargado en el camión.
+    // Complejidad temporal: O(1) — pop sobre ArrayDeque es constante amortizado.
+    // Complejidad espacial: O(1).
     public Paquete<T> descargarUltimoPaquete() {
         if (estaVacio()) {
             throw new IllegalStateException("El camión está vacío.");
@@ -41,6 +45,8 @@ public class Camion <T> {
     }
 
     // Permite ver el último paquete cargado sin removerlo.
+    // Complejidad temporal: O(1) — peek no recorre la estructura.
+    // Complejidad espacial: O(1).
     public Paquete<T> verUltimoPaquete() {
         if (estaVacio()) {
             throw new IllegalStateException("El camión está vacío.");
@@ -49,6 +55,8 @@ public class Camion <T> {
     }
 
     // Descarga todos los paquetes del camión.
+    // Complejidad temporal: O(n) — recorre cada elemento una vez.
+    // Complejidad espacial: O(1) — no usa memoria extra.
     public void descargarTodoElCamion() {
         while (!pila.isEmpty()) {
             pila.pop();
@@ -56,16 +64,19 @@ public class Camion <T> {
     }
 
     // Indica si el camión está lleno (alcanzó su capacidad máxima)
+    // Complejidad temporal: O(1).
     public boolean estaLleno() {
         return pila.size() == capacidad;
     }
 
     // Indica si el camión está vacío
+    // Complejidad temporal: O(1).
     public boolean estaVacio() {
         return pila.isEmpty();
     }
 
     // Devuelve la cantidad de paquetes cargados en el camión
+    // Complejidad temporal: O(1).
     public int cantidadPaquetes() {
         return pila.size();
     }

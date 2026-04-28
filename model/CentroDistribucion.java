@@ -17,6 +17,8 @@ public class CentroDistribucion<T> {
     }
 
     // Registra un paquete (valida ID único) y lo encola según su prioridad.
+    // Complejidad temporal: O(1) — contains y add sobre HashSet y ArrayDeque son O(1) amortizado.
+    // Complejidad espacial: O(1) por llamada; O(n) total en memoria al acumular paquetes.
     public void registrarPaquete(Paquete<T> paquete){
         if (idsRegistrados.contains(paquete.getId())){
             throw new IllegalArgumentException("El id de ese paquete ya es existente");
@@ -31,11 +33,14 @@ public class CentroDistribucion<T> {
     }
 
     // Indica si un paquete debe ir a la cola prioritaria.
+    // Complejidad temporal: O(1).
     public boolean esPrioritario(Paquete<T> paquete){
         return paquete.isUrgente() || paquete.getPeso() > 50;
     }
 
     // Devuelve el próximo paquete a entregar (prioritarios primero), sin desencolarlo.
+    // Complejidad temporal: O(1) — peek sobre ArrayDeque es constante.
+    // Complejidad espacial: O(1).
     public Paquete<T> obtenerProximoPaquete() {
         if (!colaPrioridad.isEmpty()) {
             return colaPrioridad.peek();
@@ -47,6 +52,8 @@ public class CentroDistribucion<T> {
     }
 
     // Despacha (remueve y devuelve) el próximo paquete a entregar.
+    // Complejidad temporal: O(1) — poll sobre ArrayDeque es constante amortizado.
+    // Complejidad espacial: O(1).
     public Paquete<T> despacharPaquete() {
         if (!colaPrioridad.isEmpty()) {
             return colaPrioridad.poll();
@@ -58,21 +65,25 @@ public class CentroDistribucion<T> {
     }
 
     // Indica si existe al menos un paquete pendiente en alguna cola.
+    // Complejidad temporal: O(1).
     public boolean hayPaquetesPendientes(){
         return !colaNormal.isEmpty() || !colaPrioridad.isEmpty();
     }
 
     // Devuelve cuántos paquetes hay en la cola prioritaria.
+    // Complejidad temporal: O(1).
     public int cantidadPrioritarios() {
         return colaPrioridad.size();
     }
 
     // Devuelve cuántos paquetes hay en la cola normal.
+    // Complejidad temporal: O(1).
     public int cantidadNormales() {
         return colaNormal.size();
     }
 
     // Devuelve el total de paquetes pendientes (prioritarios + normales).
+    // Complejidad temporal: O(1).
     public int cantidadTotalPaquetes() {
         return colaPrioridad.size() + colaNormal.size();
     }

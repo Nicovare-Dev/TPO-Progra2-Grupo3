@@ -10,11 +10,14 @@ public class SistemaGestion<T> {
     }
 
     // Carga un paquete en el camión.
+    // Complejidad temporal: O(1) — delega a Camion.cargarPaquete.
     public void cargarPaqueteEnCamion(Paquete<T> paquete) {
         camion.cargarPaquete(paquete);
     }
 
     // Transfiere todos los paquetes del camión al centro de distribución.
+    // Complejidad temporal: O(n) — recorre cada paquete del camión una vez.
+    // Complejidad espacial: O(1) — no usa estructuras auxiliares.
     public void transferirAlCentro() {
         while (!camion.estaVacio()) {
             Paquete<T> paquete = camion.descargarUltimoPaquete();
@@ -23,6 +26,7 @@ public class SistemaGestion<T> {
     }
 
     // Despacha el próximo paquete del centro.
+    // Complejidad temporal: O(1) — delega a CentroDistribucion.despacharPaquete.
     public Paquete<T> despacharPaquete() {
         return centro.despacharPaquete();
     }
