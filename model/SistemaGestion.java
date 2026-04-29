@@ -21,7 +21,13 @@ public class SistemaGestion<T> {
     public void transferirAlCentro() {
         while (!camion.estaVacio()) {
             Paquete<T> paquete = camion.descargarUltimoPaquete();
-            centro.registrarPaquete(paquete);
+            try {
+                centro.registrarPaquete(paquete);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Advertencia: no se pudo registrar paquete id="
+                        + paquete.getId() + " - " + e.getMessage());
+                // el paquete ya salió del camión, al menos notificamos
+            }
         }
     }
 

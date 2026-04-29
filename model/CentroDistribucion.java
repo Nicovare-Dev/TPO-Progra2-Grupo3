@@ -55,13 +55,16 @@ public class CentroDistribucion<T> {
     // Complejidad temporal: O(1) — poll sobre ArrayDeque es constante amortizado.
     // Complejidad espacial: O(1).
     public Paquete<T> despacharPaquete() {
+        Paquete<T> paquete;
         if (!colaPrioridad.isEmpty()) {
-            return colaPrioridad.poll();
+            paquete = colaPrioridad.poll();
         } else if (!colaNormal.isEmpty()) {
-            return colaNormal.poll();
+            paquete = colaNormal.poll();
         } else {
             throw new IllegalStateException("No hay paquetes pendientes en el centro de distribución.");
         }
+        idsRegistrados.remove(paquete.getId()); // ← agregar esta línea
+        return paquete;
     }
 
     // Indica si existe al menos un paquete pendiente en alguna cola.

@@ -66,12 +66,12 @@ public class Menu {
     }
 
     private void deshacerUltimaCarga() {
-        try {
-            Paquete<String> removido = sistema.getCamion().descargarUltimoPaquete();
-            System.out.println("Última carga deshecha: " + removido);
-        } catch (IllegalStateException e) {
-            System.out.println("Error: " + e.getMessage());
+        if (sistema.getCamion().estaVacio()) {
+            System.out.println("No hay paquetes en el camión para deshacer.");
+            return;
         }
+        Paquete<String> removido = sistema.getCamion().descargarUltimoPaquete();
+        System.out.println("Última carga deshecha: " + removido);
     }
 
     private void transferirAlCentro() {
