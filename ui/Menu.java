@@ -1,6 +1,7 @@
 package ui;
 
 import model.*;
+import persistencia.InventarioLoader;
 import java.util.Scanner;
 
 public class Menu {
@@ -25,6 +26,7 @@ public class Menu {
                 case 3 -> transferirAlCentro();
                 case 4 -> despacharPaquete();
                 case 5 -> verEstado();
+                case 6 -> cargarInventarioDesdeJson();
                 case 0 -> System.out.println("Saliendo del sistema...");
                 default -> System.out.println("Opción inválida.");
             }
@@ -38,6 +40,7 @@ public class Menu {
         System.out.println("3. Transferir camión al centro");
         System.out.println("4. Despachar paquete del centro");
         System.out.println("5. Ver estado del sistema");
+        System.out.println("6. Cargar inventario desde JSON");
         System.out.println("0. Salir");
         System.out.println("=========================");
     }
@@ -86,6 +89,21 @@ public class Menu {
             System.out.println("Paquete despachado: " + despachado);
         } catch (IllegalStateException e) {
             System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void cargarInventarioDesdeJson() {
+        System.out.println("\n-- Cargar Inventario desde JSON --");
+        System.out.print("Ruta del archivo (ENTER para usar 'inventario.json'): ");
+        String ruta = scanner.nextLine().trim();
+        if (ruta.isEmpty()) {
+            ruta = "inventario.json";
+        }
+        try {
+            int cargados = InventarioLoader.cargarDesdeArchivo(ruta, sistema);
+            System.out.println("Se cargaron " + cargados + " paquete(s) al camión desde " + ruta + ".");
+        } catch (Exception e) {
+            System.out.println("Error al cargar inventario: " + e.getMessage());
         }
     }
 

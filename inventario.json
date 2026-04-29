@@ -1,0 +1,68 @@
+{
+  "paquetes": [
+    {
+      "id": 1,
+      "peso": 12.5,
+      "destino": "Buenos Aires",
+      "urgente": false,
+      "tipoCarga": "ELECTRONICA",
+      "contenido": "Notebook Lenovo ThinkPad"
+    },
+    {
+      "id": 2,
+      "peso": 75.0,
+      "destino": "Cordoba",
+      "urgente": false,
+      "tipoCarga": "GENERAL",
+      "contenido": "Maquinaria industrial"
+    },
+    {
+      "id": 3,
+      "peso": 8.3,
+      "destino": "Mendoza",
+      "urgente": true,
+      "tipoCarga": "FRAGILES",
+      "contenido": "Cristaleria fina"
+    },
+    {
+      "id": 4,
+      "peso": 22.0,
+      "destino": "Rosario",
+      "urgente": false,
+      "tipoCarga": "ALIMENTOS",
+      "contenido": "Cajas de vino Malbec"
+    },
+    {
+      "id": 5,
+      "peso": 5.5,
+      "destino": "La Plata",
+      "urgente": true,
+      "tipoCarga": "ELECTRONICA",
+      "contenido": "Smartphones Samsung"
+    },
+    {
+      "id": 6,
+      "peso": 60.2,
+      "destino": "Salta",
+      "urgente": false,
+      "tipoCarga": "GENERAL",
+      "contenido": "Bolsas de cemento"
+    },
+    {
+      "id": 7,
+      "peso": 18.7,
+      "destino": "Tucuman",
+      "urgente": false,
+      "tipoCarga": "ALIMENTOS",
+      "contenido": "Conservas surtidas"
+    },
+    {
+      "id": 8,
+      "peso": 3.2,
+      "destino": "Neuquen",
+      "urgente": false,
+      "tipoCarga": "FRAGILES",
+      "contenido": "Vasos de cristal"
+    }
+  ]
+}
