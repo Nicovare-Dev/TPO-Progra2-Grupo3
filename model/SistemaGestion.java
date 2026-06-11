@@ -3,10 +3,14 @@ package model;
 public class SistemaGestion<T> {
     private Camion<T> camion;
     private CentroDistribucion<T> centro;
+    private ArbolDepositos arbolDepositos;
+    private RedRutas redRutas;
 
     public SistemaGestion(String patente) {
         this.camion = new Camion<>(patente);
         this.centro = new CentroDistribucion<>();
+        this.arbolDepositos = new ArbolDepositos();
+        this.redRutas = new RedRutas();
     }
 
     // Carga un paquete en el camión.
@@ -44,5 +48,13 @@ public class SistemaGestion<T> {
 
     public CentroDistribucion<T> getCentro() {
         return centro;
+    }
+
+    public ArbolDepositos getArbolDepositos() {
+        return arbolDepositos;
+    }
+
+    public RedRutas getRedRutas() {
+        return redRutas;
     }
 }

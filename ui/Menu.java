@@ -2,6 +2,9 @@ package ui;
 
 import model.*;
 import persistencia.InventarioLoader;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Menu {
@@ -27,6 +30,11 @@ public class Menu {
                 case 4 -> despacharPaquete();
                 case 5 -> verEstado();
                 case 6 -> cargarInventarioDesdeJson();
+                case 7 -> agregarDeposito();
+                case 8 -> ejecutarAuditoria();
+                case 9 -> reportePorNivel();
+                case 10 -> agregarRuta();
+                case 11 -> calcularDistanciaMinima();
                 case 0 -> System.out.println("Saliendo del sistema...");
                 default -> System.out.println("Opción inválida.");
             }
@@ -41,6 +49,12 @@ public class Menu {
         System.out.println("4. Despachar paquete del centro");
         System.out.println("5. Ver estado del sistema");
         System.out.println("6. Cargar inventario desde JSON");
+        System.out.println("--- Red de Depósitos ---");
+        System.out.println("7. Agregar depósito (ABB)");
+        System.out.println("8. Ejecutar auditoría (post-orden)");
+        System.out.println("9. Reporte de depósitos por nivel");
+        System.out.println("10. Agregar ruta entre depósitos");
+        System.out.println("11. Distancia mínima entre depósitos (saltos)");
         System.out.println("0. Salir");
         System.out.println("=========================");
     }
@@ -113,6 +127,82 @@ public class Menu {
         System.out.println("Centro: " + sistema.getCentro());
         System.out.println("  Prioritarios: " + sistema.getCentro().cantidadPrioritarios());
         System.out.println("  Normales:     " + sistema.getCentro().cantidadNormales());
+        System.out.println("Depósitos registrados (in-orden):");
+        sistema.getArbolDepositos().imprimirInOrden();
+        System.out.println("Red de rutas:");
+        sistema.getRedRutas().imprimirRed();
+    }
+
+    // --- Red de Depósitos (ABB + Grafo) ---
+
+    private void agregarDeposito() {
+        System.out.println("\n-- Agregar Depósito --");
+        int id = leerEntero("ID del depósito: ");
+        LocalDateTime fecha = leerFechaAuditoria();
+        try {
+            sistema.getArbolDepositos().insertar(id, fecha);
+            sistema.getRedRutas().agregarDeposito(id);
+            System.out.println("Depósito " + id + " agregado correctamente.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void ejecutarAuditoria() {
+        System.out.println("\n-- Auditoría de Depósitos (recorrido post-orden) --");
+        if (sistema.getArbolDepositos().estaVacio()) {
+            System.out.println("No hay depósitos registrados.");
+            return;
+        }
+        int marcados = sistema.getArbolDepositos().auditar();
+        System.out.println("Se marcaron como visitados " + marcados
+                + " depósito(s) sin auditoría en los últimos 30 días.");
+        sistema.getArbolDepositos().imprimirInOrden();
+    }
+
+    private void reportePorNivel() {
+        System.out.println("\n-- Reporte por Nivel (la raíz es el nivel 1) --");
+        if (sistema.getArbolDepositos().estaVacio()) {
+            System.out.println("No hay depósitos registrados.");
+            return;
+        }
+        int nivel = leerEntero("Nivel a consultar: ");
+        sistema.getArbolDepositos().imprimirNivel(nivel);
+    }
+
+    private void agregarRuta() {
+        System.out.println("\n-- Agregar Ruta --");
+        int origen = leerEntero("ID depósito origen: ");
+        int destino = leerEntero("ID depósito destino: ");
+        if (sistema.getArbolDepositos().buscar(origen) == null
+                || sistema.getArbolDepositos().buscar(destino) == null) {
+            System.out.println("Error: ambos depósitos deben estar registrados en el árbol (opción 7).");
+            return;
+        }
+        double distancia = leerDouble("Distancia (km): ");
+        try {
+            sistema.getRedRutas().agregarRuta(origen, destino, distancia);
+            System.out.println("Ruta agregada: " + origen + " <-> " + destino + " (" + distancia + " km).");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void calcularDistanciaMinima() {
+        System.out.println("\n-- Distancia Mínima entre Depósitos (BFS) --");
+        int origen = leerEntero("ID depósito origen: ");
+        int destino = leerEntero("ID depósito destino: ");
+        try {
+            int saltos = sistema.getRedRutas().distanciaMinimaEnSaltos(origen, destino);
+            if (saltos == -1) {
+                System.out.println("No existe camino entre los depósitos " + origen + " y " + destino + ".");
+            } else {
+                System.out.println("Distancia mínima entre " + origen + " y " + destino + ": "
+                        + saltos + " salto(s).");
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 
     // --- Helpers de lectura ---
@@ -148,6 +238,21 @@ public class Menu {
             if (resp.equals("s")) return true;
             if (resp.equals("n")) return false;
             System.out.println("Ingrese 's' o 'n'.");
+        }
+    }
+
+    private LocalDateTime leerFechaAuditoria() {
+        while (true) {
+            System.out.print("Fecha de última auditoría (AAAA-MM-DD, ENTER si nunca fue auditado): ");
+            String texto = scanner.nextLine().trim();
+            if (texto.isEmpty()) {
+                return null;
+            }
+            try {
+                return LocalDate.parse(texto).atStartOfDay();
+            } catch (DateTimeParseException e) {
+                System.out.println("Fecha inválida. Use el formato AAAA-MM-DD, por ejemplo 2026-05-20.");
+            }
         }
     }
 
